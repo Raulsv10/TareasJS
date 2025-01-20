@@ -1,3 +1,5 @@
+const ssLstCar = "lstCar";
+
 const Producto = function (id, nombre, dsc, precio, imgN) {
   this.id = id;
   this.nombre = nombre;
@@ -6,7 +8,7 @@ const Producto = function (id, nombre, dsc, precio, imgN) {
   this.imgN = imgN;
 };
 
-const carrito = function (id, nombre, cantidad, precio) {
+const carrito = function (id, nombre, dsc, cantidad, precio) {
   this.id = id;
   this.nombre = nombre;
   this.cantidad = cantidad;
@@ -73,6 +75,21 @@ let p8 = new Producto(
 let lstProductos = [p1, p2, p3, p4, p5, p6, p7, p8];
 let lstCarrito = [];
 
+const valor = [];
+// sessionStorage.setItem(ssLstCar, valor);
+
+function recuperacarrito() {
+  const valor = sessionStorage.getItem(ssLstCar);
+  if (valor) {
+    console.log(`La variable "${ssLstCar}" tiene información: ${valor}`);
+    let lst = localStorage.getItem(ssLstCar);
+    lst !== null ? (lstCarrito = lst) : (lstCarrito = []);
+  } else {
+    console.log(`La variable "${ssLstCar}" no tiene información o no existe.`);
+    lstCarrito = [];
+  }
+}
+
 const prod = document.querySelector(".lstproduct");
 // const prev = document.querySelector("#previous");
 prod.innerHTML = "";
@@ -100,6 +117,8 @@ lstProductos.forEach((element) => {
 
   prod.innerHTML = item;
 });
+
+recuperacarrito();
 
 document.querySelectorAll(".btn-prev").forEach((button) => {
   button.addEventListener("click", function () {
@@ -132,7 +151,13 @@ document.querySelectorAll(".btn-car").forEach((button) => {
     const cantidad = parseInt(txtCantidad.value);
     if (lstCarrito.length === 0)
       lstCarrito.push(
-        new carrito(item[0].id, item[0].nombre, cantidad, item[0].precio)
+        new carrito(
+          item[0].id,
+          item[0].nombre,
+          item[0].dsc,
+          cantidad,
+          item[0].precio
+        )
       );
     else {
       let flag = false;
@@ -144,9 +169,19 @@ document.querySelectorAll(".btn-car").forEach((button) => {
       });
       if (!flag)
         lstCarrito.push(
-          new carrito(item[0].id, item[0].nombre, cantidad, item[0].precio)
+          new carrito(
+            item[0].id,
+            item[0].nombre,
+            item[0].dsc,
+            cantidad,
+            item[0].precio
+          )
         );
     }
+    Toastify({
+      text: "producto en carrito",
+      duration: 3000,
+    }).showToast();
   });
 });
 
@@ -154,14 +189,15 @@ const button = document.getElementById("btn-carshop");
 
 // Add a click event listener to the button
 button.addEventListener("click", () => {
-  if (lstCarrito.length === 0) alert("Debe seleccionar algo del carrito");
-  else {
-    let fechaActual = new Date();
-    console.log(
-      "El pedido se ha realizado con fecha: " + fechaActual.toLocaleString()
-    );
-    lstCarrito.forEach((item) => {
-      console.log(item.nombre + ": " + item.cantidad * item.precio);
-    });
+  if (lstCarrito.length === 0) {
+    alert("Debe seleccionar algo del carrito");
+    return;
   }
+  sessionStorage.setItem("lstCar", JSON.stringify(lstCarrito));
+  const recuperarDatosDelFormulario = JSON.parse(
+    sessionStorage.getItem("lstCar")
+  );
+  console.log(recuperarDatosDelFormulario);
+  window.location.pathname = "/Carrito.html";
+  //}
 });
