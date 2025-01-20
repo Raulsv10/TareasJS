@@ -198,6 +198,6 @@ button.addEventListener("click", () => {
     sessionStorage.getItem("lstCar")
   );
   console.log(recuperarDatosDelFormulario);
-  window.location.pathname = "./Carrito.html";
+  window.location.href = "/Carrito.html";
   //}
 });
