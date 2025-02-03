@@ -187,7 +187,6 @@ document.querySelectorAll(".btn-car").forEach((button) => {
 
 const button = document.getElementById("btn-carshop");
 
-// Add a click event listener to the button
 button.addEventListener("click", () => {
   if (lstCarrito.length === 0) {
     alert("Debe seleccionar algo del carrito");
@@ -199,5 +198,4 @@ button.addEventListener("click", () => {
   );
   console.log(recuperarDatosDelFormulario);
   window.location.href = "./Carrito.html";
-  //}
 });
